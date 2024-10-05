@@ -30,7 +30,7 @@ def saveLatestASN():
     initFile()
     for asn in asns:
         asnNumber = asn.xpath('td[1]/a')[0].text.replace('AS','')
-#        asnName = asn.xpath('td[2]')[0].text
+        asnName = asn.xpath('td[2]')[0].text
         if asnName != None:
             asnInfo = "{}".format(asnNumber)
             with open("ASN.China.list", "a") as asnFile:
