@@ -12,6 +12,10 @@ import requests
 from lxml import etree
 import time
 
+def initFile():
+    with open("ASN.China.list", "w") as asnFile:
+        asnFile.write("\n")
+
 def saveLatestASN():
     url = "https://bgp.he.net/country/CN"
     headers = {
@@ -20,12 +24,13 @@ def saveLatestASN():
     r = requests.get(url = url, headers = headers).text
     tree = etree.HTML(r)
     asns = tree.xpath('//*[@id="asns"]/tbody/tr')
+    initFile()
     for asn in asns:
         asnNumber = asn.xpath('td[1]/a')[0].text.replace('AS','')
         asnName = asn.xpath('td[2]')[0].text
         if asnName != None:
             asnInfo = "{}".format(asnNumber)
-            with open("ASN.China.list", "w") as asnFile:
+            with open("ASN.China.list", "a") as asnFile:
                 asnFile.write(asnInfo)
                 asnFile.write("\n")
 
