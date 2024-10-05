@@ -13,7 +13,7 @@ from lxml import etree
 import time
 
 def initFile():
-#    localTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    localTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     with open("ASN.China.list", "w") as asnFile:
 #        asnFile.write("// ASN Information in China. (https://github.com/missuo/ASN-China) \n")
 #        asnFile.write("// Last Updated: UTC " + localTime + "\n")
