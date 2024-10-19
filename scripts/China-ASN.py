@@ -4,7 +4,7 @@ import time
 
 def initFile():
     localTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    with open("ASN.China.list", "w") as asnFile:
+    with open("ASN.China.txt", "w") as asnFile:
         asnFile.write("// Last Updated: UTC " + localTime + "\n")
 
 def saveLatestASN():
@@ -21,7 +21,7 @@ def saveLatestASN():
         asnName = asn.xpath('td[2]')[0].text
         if asnName != None:
             asnInfo = "{}".format(asnNumber)
-            with open("ASN.China.list", "a") as asnFile:
+            with open("ASN.China.txt", "a") as asnFile:
                 asnFile.write(asnInfo)
                 asnFile.write("\n")
 
