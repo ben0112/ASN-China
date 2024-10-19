@@ -5,7 +5,6 @@ import time
 def initFile():
     localTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     with open("china_asns.txt", "w") as asnFile:
-        asnFile.write("// Last Updated: UTC " + localTime + "\n")
 
 def saveLatestASN():
     url = "https://bgp.he.net/country/CN"
@@ -20,7 +19,7 @@ def saveLatestASN():
         asnNumber = asn.xpath('td[1]/a')[0].text.replace('AS','')
         asnName = asn.xpath('td[2]')[0].text
         if asnName != None:
-            asnInfo = "IP-ASN,{}".format(asnNumber)
+            asnInfo = "IP-ASN,{} // {}".format(asnNumber, asnName)
             with open("china_asns.txt", "a") as asnFile:
                 asnFile.write(asnInfo)
                 asnFile.write("\n")
