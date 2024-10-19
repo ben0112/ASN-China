@@ -3,7 +3,9 @@ from lxml import etree
 import time
 
 def initFile():
+    localTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     with open("ASN.China.list", "w") as asnFile:
+        asnFile.write("// Last Updated: UTC " + localTime + "\n")
 
 def saveLatestASN():
     url = "https://bgp.he.net/country/CN"
