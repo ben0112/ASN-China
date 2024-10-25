@@ -3,10 +3,9 @@ from lxml import etree
 import time
 
 def initFile():
-    localTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    with open("ASN.US.list", "w") as asnFile:
-        asnFile.write("// ASN Information in US. (https://github.com/ben0112/ASN-China) \n")
-        asnFile.write("// Last Updated: UTC " + localTime + "\n")
+    with open("usa_asns.txt", "w") as asnFile:
+        pass
+initFile()
 
 def saveLatestASN():
     url = "https://bgp.he.net/country/US"
@@ -21,8 +20,8 @@ def saveLatestASN():
         asnNumber = asn.xpath('td[1]/a')[0].text.replace('AS','')
         asnName = asn.xpath('td[2]')[0].text
         if asnName != None:
-            asnInfo = "IP-ASN,{}".format(asnNumber)
-            with open("ASN.US.list", "a") as asnFile:
+            asnInfo = "{}".format(asnNumber)
+            with open("usa_asns.txt", "a") as asnFile:
                 asnFile.write(asnInfo)
                 asnFile.write("\n")
 
