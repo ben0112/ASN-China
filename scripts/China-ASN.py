@@ -23,6 +23,6 @@ def saveLatestASN():
             asnInfo = "{}".format(asnNumber)
             with open("china_asns.txt", "a") as asnFile:
                 asnFile.write(asnInfo)
-                asnFile.write("\n")
+                asnFile.write("\r\n")
 
 saveLatestASN()
