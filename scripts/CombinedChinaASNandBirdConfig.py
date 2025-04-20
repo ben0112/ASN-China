@@ -36,7 +36,7 @@ def generate_bird_config(asn_list, config_filename="bird_filter.conf"):
     define_statement = f"define china_asns = [{asn_set_str}];"
     filter_definition = """
 filter block_china {
-    if bgp_path ~ china_asns then reject;
+    if bgp_path.last ~ china_asns then reject;
     accept;
 }
 """
