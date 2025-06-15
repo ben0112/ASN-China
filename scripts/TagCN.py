@@ -37,7 +37,7 @@ def generate_bird_config(asn_list, config_filename="bird_filter.conf"):
     filter_definition = """
 filter tag_china {
     if bgp_path.last ~ china_asns then {
-        bgp_community.add ((65000,086));
+        bgp_community.add ((65000,86));
     }
     accept;
 }
