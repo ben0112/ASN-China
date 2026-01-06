@@ -22,9 +22,9 @@ jobs:
           pip install requests lxml
       - name: Run Python
         run: |
-          python scripts/CombinedChinaASNandBirdConfig.py
+          python scripts/BirdAndFRR.py
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: Update IP List
+          commit_message: Update IP List And Scripts.
 
 
