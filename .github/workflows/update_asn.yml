@@ -1,4 +1,4 @@
-name: Update China ASN List
+name: Update CHINA_ASNS RSC
 
 on:
   schedule:
