@@ -1,0 +1,38 @@
+# Define variables
+:local url "https://raw.githubusercontent.com/ben0112/ASN-China/refs/heads/main/china_asns.rsc"
+:local fileName "china_asns.rsc"
+:local listName "CHINA_ASNS"
+
+:log info "ASN Update: Started..."
+
+# 1. Download
+:do {
+    /tool fetch url=$url mode=https dst-path=$fileName check-certificate=no
+} on-error={ :log error "ASN Update: Download failed."; :error "" }
+
+:delay 2s
+
+# 2. Check File Size & Process
+:if ([:len [/file find name=$fileName]] > 0) do={
+    :local fileSize [/file get [find name=$fileName] size]
+    
+    if ($fileSize > 100) do={
+        
+        # 3. CLEANUP
+        :log info "ASN Update: Removing old entries..."
+        :do {
+            /routing/filter/num-list/remove [find list=$listName]
+        } on-error={ :log warning "ASN Update: List was empty or cleanup skipped." }
+
+        # 4. IMPORT
+        :do {
+            /import $fileName
+            :log info "ASN Update: Success! Rules updated."
+        } on-error={
+            :log error "ASN Update: CRITICAL ERROR during Import."
+        }
+        
+    } else={
+        :log error "ASN Update: File too small."
+    }
+}
