@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # Critical: Allows the Action to push changes back to the repo
+      contents: write
 
     steps:
       - name: Checkout repository
@@ -18,32 +18,37 @@ jobs:
 
       - name: Generate MikroTik RSC file
         run: |
-          # Define filenames
           SOURCE_URL="https://raw.githubusercontent.com/ben0112/ASN-China/refs/heads/main/china_asns.txt"
           OUTPUT_FILE="china_asns.rsc"
           LIST_NAME="CHINA_ASNS"
 
-          echo "Downloading and converting ASN list..."
+          echo "Generating MikroTik import file..."
 
-          # 1. Add header to remove existing entries (prevents duplicates/errors on re-import)
-          echo "/routing/filter/num-list/remove [find list=$LIST_NAME]" > $OUTPUT_FILE
+          # 1. Start with the Menu Context (This makes the file smaller and cleaner)
+          echo "/routing/filter/num-list" > $OUTPUT_FILE
           
-          # 2. Download and parse using awk, appending to the file
-          # FIX APPLIED HERE: Added '/^[0-9]+$/' to ignore empty lines
-          curl -s $SOURCE_URL | awk -v listname="$LIST_NAME" '/^[0-9]+$/ {print "/routing/filter/num-list/add list=" listname " range=" $1}' >> $OUTPUT_FILE
+          # 2. Add the clean-up command (Remove old entries for this list)
+          echo "remove [find list=$LIST_NAME]" >> $OUTPUT_FILE
+
+          # 3. Download and parse strictly
+          # gsub(/\r/, "") -> Removes Windows Carriage Returns (Critical Fix)
+          # if ($1 ~ /^[0-9]+$/) -> Checks if the first part is definitely a number
+          curl -s $SOURCE_URL | awk -v listname="$LIST_NAME" '{ 
+            gsub(/\r/, ""); 
+            if ($1 ~ /^[0-9]+$/) print "add list=" listname " range=" $1 
+          }' >> $OUTPUT_FILE
+
+          # 4. Add a "back" command to exit the context (Good practice)
+          echo ".." >> $OUTPUT_FILE
 
           echo "Done. Generated $(wc -l < $OUTPUT_FILE) lines."
 
       - name: Commit and Push changes
         run: |
-          # Configure git bot user
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-
-          # Stage the file
           git add china_asns.rsc
-
-          # Check if there are changes; if yes, commit and push. If no, exit silently.
+          
           if git diff --quiet && git diff --staged --quiet; then
             echo "No changes in ASN list. Skipping commit."
           else
