@@ -2,7 +2,7 @@ name: Update China ASN List
 
 on:
   schedule:
-    # Runs at 02:00 UTC every day
+    # Runs at 18:00 UTC every day
     - cron: '0 18 * * *'
   workflow_dispatch: # Allows you to run this manually from the Actions tab
 
@@ -29,8 +29,8 @@ jobs:
           echo "/routing/filter/num-list/remove [find list=$LIST_NAME]" > $OUTPUT_FILE
           
           # 2. Download and parse using awk, appending to the file
-          # We use -s for silent curl, and awk to format each line into a MikroTik command
-          curl -s $SOURCE_URL | awk -v listname="$LIST_NAME" '{print "/routing/filter/num-list/add list=" listname " range=" $1}' >> $OUTPUT_FILE
+          # FIX APPLIED HERE: Added '/^[0-9]+$/' to ignore empty lines
+          curl -s $SOURCE_URL | awk -v listname="$LIST_NAME" '/^[0-9]+$/ {print "/routing/filter/num-list/add list=" listname " range=" $1}' >> $OUTPUT_FILE
 
           echo "Done. Generated $(wc -l < $OUTPUT_FILE) lines."
 
