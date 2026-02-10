@@ -2,9 +2,8 @@ name: Update China ASN List
 
 on:
   schedule:
-    # Runs at 18:00 UTC every day
     - cron: '0 18 * * *'
-  workflow_dispatch: # Allows you to run this manually from the Actions tab
+  workflow_dispatch:
 
 jobs:
   build:
@@ -22,22 +21,15 @@ jobs:
           OUTPUT_FILE="china_asns.rsc"
           LIST_NAME="CHINA_ASNS"
 
-          echo "Generating robust ASN list..."
+          echo "Generating data-only ASN list..."
 
-          # 1. Start the Context
+          # 1. Menu Context (No remove command here!)
           echo "/routing/filter/num-list" > $OUTPUT_FILE
 
-          # 2. THE FIX: Only remove if the list actually has entries
-          # This prevents "missing argument" error on the first run or empty lists
-          echo ":if ([:len [find list=$LIST_NAME]] > 0) do={ remove [find list=$LIST_NAME] }" >> $OUTPUT_FILE
-
-          # 3. Process the list
-          # tr -d '\r' -> Removes Windows hidden characters
-          # grep -E -> Ensures only numbers pass through
+          # 2. Add Data
+          # tr -d '\r' removes Windows characters
+          # grep ensures only numbers
           curl -s $SOURCE_URL | tr -d '\r' | grep -E '^[0-9]+$' | awk -v listname="$LIST_NAME" '{print "add list=" listname " range=" $1}' >> $OUTPUT_FILE
-
-          # 4. Exit Context
-          echo ".." >> $OUTPUT_FILE
 
           echo "Done. Generated $(wc -l < $OUTPUT_FILE) lines."
 
