@@ -22,23 +22,21 @@ jobs:
           OUTPUT_FILE="china_asns.rsc"
           LIST_NAME="CHINA_ASNS"
 
-          echo "Generating MikroTik import file..."
+          echo "Generating robust ASN list..."
 
-          # 1. Start with the Menu Context (This makes the file smaller and cleaner)
+          # 1. Start the Context
           echo "/routing/filter/num-list" > $OUTPUT_FILE
-          
-          # 2. Add the clean-up command (Remove old entries for this list)
-          echo "remove [find list=$LIST_NAME]" >> $OUTPUT_FILE
 
-          # 3. Download and parse strictly
-          # gsub(/\r/, "") -> Removes Windows Carriage Returns (Critical Fix)
-          # if ($1 ~ /^[0-9]+$/) -> Checks if the first part is definitely a number
-          curl -s $SOURCE_URL | awk -v listname="$LIST_NAME" '{ 
-            gsub(/\r/, ""); 
-            if ($1 ~ /^[0-9]+$/) print "add list=" listname " range=" $1 
-          }' >> $OUTPUT_FILE
+          # 2. THE FIX: Only remove if the list actually has entries
+          # This prevents "missing argument" error on the first run or empty lists
+          echo ":if ([:len [find list=$LIST_NAME]] > 0) do={ remove [find list=$LIST_NAME] }" >> $OUTPUT_FILE
 
-          # 4. Add a "back" command to exit the context (Good practice)
+          # 3. Process the list
+          # tr -d '\r' -> Removes Windows hidden characters
+          # grep -E -> Ensures only numbers pass through
+          curl -s $SOURCE_URL | tr -d '\r' | grep -E '^[0-9]+$' | awk -v listname="$LIST_NAME" '{print "add list=" listname " range=" $1}' >> $OUTPUT_FILE
+
+          # 4. Exit Context
           echo ".." >> $OUTPUT_FILE
 
           echo "Done. Generated $(wc -l < $OUTPUT_FILE) lines."
