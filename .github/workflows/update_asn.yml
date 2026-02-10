@@ -1,0 +1,52 @@
+name: Update China ASN List
+
+on:
+  schedule:
+    # Runs at 02:00 UTC every day
+    - cron: '0 18 * * *'
+  workflow_dispatch: # Allows you to run this manually from the Actions tab
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Critical: Allows the Action to push changes back to the repo
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate MikroTik RSC file
+        run: |
+          # Define filenames
+          SOURCE_URL="https://raw.githubusercontent.com/ben0112/ASN-China/refs/heads/main/china_asns.txt"
+          OUTPUT_FILE="china_asns.rsc"
+          LIST_NAME="CHINA_ASNS"
+
+          echo "Downloading and converting ASN list..."
+
+          # 1. Add header to remove existing entries (prevents duplicates/errors on re-import)
+          echo "/routing/filter/num-list/remove [find list=$LIST_NAME]" > $OUTPUT_FILE
+          
+          # 2. Download and parse using awk, appending to the file
+          # We use -s for silent curl, and awk to format each line into a MikroTik command
+          curl -s $SOURCE_URL | awk -v listname="$LIST_NAME" '{print "/routing/filter/num-list/add list=" listname " range=" $1}' >> $OUTPUT_FILE
+
+          echo "Done. Generated $(wc -l < $OUTPUT_FILE) lines."
+
+      - name: Commit and Push changes
+        run: |
+          # Configure git bot user
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+          # Stage the file
+          git add china_asns.rsc
+
+          # Check if there are changes; if yes, commit and push. If no, exit silently.
+          if git diff --quiet && git diff --staged --quiet; then
+            echo "No changes in ASN list. Skipping commit."
+          else
+            git commit -m "Daily update: China ASN list for MikroTik"
+            git push
+          fi
