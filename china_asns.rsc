@@ -1,5 +1,5 @@
 /routing/filter/num-list
-remove [find list=CHINA_ASNS]
+:if ([:len [find list=CHINA_ASNS]] > 0) do={ remove [find list=CHINA_ASNS] }
 add list=CHINA_ASNS range=24429
 add list=CHINA_ASNS range=132203
 add list=CHINA_ASNS range=45102
