@@ -23,13 +23,17 @@ jobs:
 
           echo "Generating data-only ASN list..."
 
-          # 1. Menu Context (No remove command here!)
+          # 1. HEADER: Enter the menu context
           echo "/routing/filter/num-list" > $OUTPUT_FILE
 
-          # 2. Add Data
+          # 2. BODY: Add the data
           # tr -d '\r' removes Windows characters
           # grep ensures only numbers
           curl -s $SOURCE_URL | tr -d '\r' | grep -E '^[0-9]+$' | awk -v listname="$LIST_NAME" '{print "add list=" listname " range=" $1}' >> $OUTPUT_FILE
+
+          # 3. FOOTER: REMOVED
+          # Do not add ".." or anything else at the end. 
+          # The file should just end with the last "add" command.
 
           echo "Done. Generated $(wc -l < $OUTPUT_FILE) lines."
 
