@@ -54,10 +54,10 @@ add list=CHINA_ASNS range=24138
 add list=CHINA_ASNS range=136958
 add list=CHINA_ASNS range=10212
 add list=CHINA_ASNS range=24406
+add list=CHINA_ASNS range=209294
 add list=CHINA_ASNS range=24444
 add list=CHINA_ASNS range=24409
 add list=CHINA_ASNS range=23848
-add list=CHINA_ASNS range=209294
 add list=CHINA_ASNS range=139138
 add list=CHINA_ASNS range=9814
 add list=CHINA_ASNS range=9809
@@ -101,6 +101,7 @@ add list=CHINA_ASNS range=45110
 add list=CHINA_ASNS range=45079
 add list=CHINA_ASNS range=38019
 add list=CHINA_ASNS range=24133
+add list=CHINA_ASNS range=214848
 add list=CHINA_ASNS range=201674
 add list=CHINA_ASNS range=154648
 add list=CHINA_ASNS range=153726
@@ -133,7 +134,6 @@ add list=CHINA_ASNS range=24430
 add list=CHINA_ASNS range=24424
 add list=CHINA_ASNS range=23853
 add list=CHINA_ASNS range=23844
-add list=CHINA_ASNS range=214848
 add list=CHINA_ASNS range=214575
 add list=CHINA_ASNS range=18241
 add list=CHINA_ASNS range=18239
@@ -182,7 +182,6 @@ add list=CHINA_ASNS range=45071
 add list=CHINA_ASNS range=45061
 add list=CHINA_ASNS range=38027
 add list=CHINA_ASNS range=37969
-add list=CHINA_ASNS range=37942
 add list=CHINA_ASNS range=24547
 add list=CHINA_ASNS range=24427
 add list=CHINA_ASNS range=24348
@@ -195,6 +194,7 @@ add list=CHINA_ASNS range=23771
 add list=CHINA_ASNS range=214899
 add list=CHINA_ASNS range=211843
 add list=CHINA_ASNS range=209306
+add list=CHINA_ASNS range=204211
 add list=CHINA_ASNS range=199406
 add list=CHINA_ASNS range=17969
 add list=CHINA_ASNS range=17964
@@ -274,6 +274,7 @@ add list=CHINA_ASNS range=38834
 add list=CHINA_ASNS range=38564
 add list=CHINA_ASNS range=38380
 add list=CHINA_ASNS range=38378
+add list=CHINA_ASNS range=37942
 add list=CHINA_ASNS range=24369
 add list=CHINA_ASNS range=24363
 add list=CHINA_ASNS range=24361
@@ -284,7 +285,6 @@ add list=CHINA_ASNS range=216224
 add list=CHINA_ASNS range=213876
 add list=CHINA_ASNS range=212053
 add list=CHINA_ASNS range=210041
-add list=CHINA_ASNS range=204211
 add list=CHINA_ASNS range=199392
 add list=CHINA_ASNS range=18245
 add list=CHINA_ASNS range=17799
@@ -296,7 +296,6 @@ add list=CHINA_ASNS range=152920
 add list=CHINA_ASNS range=152186
 add list=CHINA_ASNS range=152092
 add list=CHINA_ASNS range=151951
-add list=CHINA_ASNS range=151270
 add list=CHINA_ASNS range=151261
 add list=CHINA_ASNS range=151247
 add list=CHINA_ASNS range=151231
@@ -499,6 +498,7 @@ add list=CHINA_ASNS range=210634
 add list=CHINA_ASNS range=210176
 add list=CHINA_ASNS range=209574
 add list=CHINA_ASNS range=209300
+add list=CHINA_ASNS range=207299
 add list=CHINA_ASNS range=205651
 add list=CHINA_ASNS range=205610
 add list=CHINA_ASNS range=205152
@@ -526,6 +526,7 @@ add list=CHINA_ASNS range=151296
 add list=CHINA_ASNS range=151295
 add list=CHINA_ASNS range=151284
 add list=CHINA_ASNS range=151277
+add list=CHINA_ASNS range=151270
 add list=CHINA_ASNS range=151263
 add list=CHINA_ASNS range=151253
 add list=CHINA_ASNS range=151251
@@ -762,7 +763,6 @@ add list=CHINA_ASNS range=207615
 add list=CHINA_ASNS range=207338
 add list=CHINA_ASNS range=207317
 add list=CHINA_ASNS range=207303
-add list=CHINA_ASNS range=207299
 add list=CHINA_ASNS range=207292
 add list=CHINA_ASNS range=207091
 add list=CHINA_ASNS range=206843
