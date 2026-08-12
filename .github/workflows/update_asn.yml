@@ -17,7 +17,7 @@ jobs:
 
       - name: Generate MikroTik RSC file
         run: |
-          SOURCE_URL="https://raw.githubusercontent.com/ben0112/ASN-China/refs/heads/main/china_asns.txt"
+          SOURCE_FILE="china_asns.txt"
           OUTPUT_FILE="china_asns.rsc"
           LIST_NAME="CHINA_ASNS"
 
@@ -29,10 +29,10 @@ jobs:
           # 2. BODY: Add the data
           # tr -d '\r' removes Windows characters
           # grep ensures only numbers
-          curl -s $SOURCE_URL | tr -d '\r' | grep -E '^[0-9]+$' | awk -v listname="$LIST_NAME" '{print "add list=" listname " range=" $1}' >> $OUTPUT_FILE
+          tr -d '\r' < $SOURCE_FILE | grep -E '^[0-9]+$' | awk -v listname="$LIST_NAME" '{print "add list=" listname " range=" $1}' >> $OUTPUT_FILE
 
           # 3. FOOTER: REMOVED
-          # Do not add ".." or anything else at the end. 
+          # Do not add ".." or anything else at the end.
           # The file should just end with the last "add" command.
 
           echo "Done. Generated $(wc -l < $OUTPUT_FILE) lines."
@@ -42,7 +42,7 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add china_asns.rsc
-          
+
           if git diff --quiet && git diff --staged --quiet; then
             echo "No changes in ASN list. Skipping commit."
           else
