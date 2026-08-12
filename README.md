@@ -1,5 +1,7 @@
 # ASN-China
 
+**English** | [简体中文](README.zh-CN.md)
+
 Daily-updated list of China ASNs, plus ready-to-use BGP filter configs to **block routes originating from Chinese ASNs** on BIRD, FRR, and MikroTik RouterOS v7.
 
 Forked from [missuo/ASN-China](https://github.com/missuo/ASN-China). This fork replaces the upstream IP lists with router-oriented filter generation.
