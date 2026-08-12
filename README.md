@@ -6,7 +6,7 @@ Forked from [missuo/ASN-China](https://github.com/missuo/ASN-China). This fork r
 
 ## How it works
 
-A single GitHub Action (**Update ASN Lists**) runs daily at 16:00 UTC (00:00 Beijing): `scripts/BirdAndFRR.py` scrapes [bgp.he.net/country/CN](https://bgp.he.net/country/CN), regenerates all four output files, and the changes are auto-committed. If the scrape returns an implausibly small list, the run aborts without touching the files.
+A single GitHub Action (**Update ASN Lists**) runs daily at 16:00 UTC (00:00 Beijing): `scripts/generate_asn_lists.py` scrapes [bgp.he.net/country/CN](https://bgp.he.net/country/CN), regenerates all four output files, and the changes are auto-committed. If the scrape returns an implausibly small list, the run aborts without touching the files.
 
 ## Files
 
@@ -78,13 +78,13 @@ router bgp 65254
 
 ## Scripts
 
-`scripts/BirdAndFRR.py` is the single generator, run daily by CI. It scrapes the ASN list and writes all four output files: `china_asns.txt`, `bird_filter.conf`, `frr_filter.conf`, and `china_asns.rsc`.
+`scripts/generate_asn_lists.py` is the single generator, run daily by CI. It scrapes the ASN list and writes all four output files: `china_asns.txt`, `bird_filter.conf`, `frr_filter.conf`, and `china_asns.rsc`.
 
 Run locally:
 
 ```bash
 pip install requests lxml
-python scripts/BirdAndFRR.py
+python scripts/generate_asn_lists.py
 ```
 
 ## Data source & caveats

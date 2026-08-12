@@ -27,7 +27,7 @@ jobs:
           pip install requests lxml
 
       - name: Generate ASN lists and filter configs
-        run: python scripts/BirdAndFRR.py
+        run: python scripts/generate_asn_lists.py
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
