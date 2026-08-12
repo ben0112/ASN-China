@@ -81,7 +81,7 @@ router bgp 65254
 
 ## Scripts
 
-`scripts/BirdAndFRR.py` is the single generator, run daily by CI. It scrapes the ASN list and writes `china_asns.txt`, `bird_filter.conf`, and `frr_filter.conf`.
+`scripts/BirdAndFRR.py` scrapes the ASN list and writes `china_asns.txt`, `bird_filter.conf`, and `frr_filter.conf` (run daily by CI). The MikroTik `china_asns.rsc` is generated separately by inline shell in `.github/workflows/update_asn.yml`, which converts `china_asns.txt` into `/routing/filter/num-list` commands.
 
 Run locally:
 
