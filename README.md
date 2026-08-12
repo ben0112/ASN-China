@@ -6,10 +6,7 @@ Forked from [missuo/ASN-China](https://github.com/missuo/ASN-China). This fork r
 
 ## How it works
 
-Two GitHub Actions keep the files current:
-
-1. **Update ASN and IP List** (daily at 16:00 UTC / 00:00 Beijing) — runs `scripts/BirdAndFRR.py`, which scrapes [bgp.he.net/country/CN](https://bgp.he.net/country/CN) and regenerates `china_asns.txt`, `bird_filter.conf`, and `frr_filter.conf`.
-2. **Update CHINA_ASNS RSC** (daily at 18:00 UTC) — converts `china_asns.txt` into `china_asns.rsc` for MikroTik.
+A single GitHub Action (**Update ASN Lists**) runs daily at 16:00 UTC (00:00 Beijing): `scripts/BirdAndFRR.py` scrapes [bgp.he.net/country/CN](https://bgp.he.net/country/CN), regenerates all four output files, and the changes are auto-committed. If the scrape returns an implausibly small list, the run aborts without touching the files.
 
 ## Files
 
@@ -81,7 +78,7 @@ router bgp 65254
 
 ## Scripts
 
-`scripts/BirdAndFRR.py` scrapes the ASN list and writes `china_asns.txt`, `bird_filter.conf`, and `frr_filter.conf` (run daily by CI). The MikroTik `china_asns.rsc` is generated separately by inline shell in `.github/workflows/update_asn.yml`, which converts `china_asns.txt` into `/routing/filter/num-list` commands.
+`scripts/BirdAndFRR.py` is the single generator, run daily by CI. It scrapes the ASN list and writes all four output files: `china_asns.txt`, `bird_filter.conf`, `frr_filter.conf`, and `china_asns.rsc`.
 
 Run locally:
 
@@ -92,7 +89,7 @@ python scripts/BirdAndFRR.py
 
 ## Data source & caveats
 
-- All data comes from a single HTML scrape of [bgp.he.net](https://bgp.he.net/country/CN). If the page layout changes, updates will silently stop; accuracy depends on Hurricane Electric's country attribution.
+- All data comes from a single HTML scrape of [bgp.he.net](https://bgp.he.net/country/CN); accuracy depends on Hurricane Electric's country attribution. If the page layout changes, the workflow fails loudly and keeps the last good lists.
 - Blocking by origin AS only filters routes *originated* by Chinese ASNs — traffic transiting China or Chinese networks announcing from foreign ASNs is not covered.
 
 ## Credits

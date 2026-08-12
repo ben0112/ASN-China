@@ -1,9 +1,17 @@
+import sys
+
 import requests
 from lxml import etree
 
+# Refuse to overwrite the output files if the scrape returns fewer ASNs than
+# this. Protects against bgp.he.net layout changes silently producing an
+# empty (fail-open) filter.
+MIN_EXPECTED_ASNS = 1000
+
+
 def fetch_asns():
     """
-    Fetches ASN numbers from the specified URL and returns them as a list.
+    Fetches ASN numbers from bgp.he.net and returns them as a list.
     """
     url = "https://bgp.he.net/country/CN"
     headers = {
@@ -20,6 +28,7 @@ def fetch_asns():
             asn_list.append(asn_number)
     return asn_list
 
+
 def save_asns_to_file(asn_list, filename="china_asns.txt"):
     """
     Saves the list of ASN numbers to the specified file, one per line.
@@ -28,9 +37,10 @@ def save_asns_to_file(asn_list, filename="china_asns.txt"):
         for asn in asn_list:
             asn_file.write(asn + "\n")
 
+
 def generate_bird_config(asn_list, config_filename="bird_filter.conf"):
     """
-    Generates a Bird BGP filter configuration file using the provided ASN list.
+    Generates a BIRD BGP filter configuration file using the provided ASN list.
     """
     asn_set_str = ', '.join(asn_list)
     define_statement = f"define china_asns = [{asn_set_str}];"
@@ -44,29 +54,21 @@ filter block_china {
         config_file.write(define_statement + '\n\n')
         config_file.write(filter_definition)
 
-# ============================================================================
-# NEW FUNCTION ADDED: Generate FRR configuration
-# ============================================================================
+
 def generate_frr_config(asn_list, config_filename="frr_filter.conf"):
     """
     Generates an FRR BGP filter configuration file using the provided ASN list.
     """
     with open(config_filename, "w") as config_file:
-        # Write header comment
         config_file.write("! FRR BGP filter configuration to block Chinese ASNs\n")
         config_file.write("! Auto-generated from https://bgp.he.net/country/CN\n")
         config_file.write(f"! Total ASNs: {len(asn_list)}\n")
         config_file.write("!\n")
-        
-        # Generate AS-path access list entries
         config_file.write("! AS-path access list for blocking Chinese ASNs\n")
         config_file.write("! The $ at the end matches the last ASN in the path (origin AS)\n")
         for asn in asn_list:
             config_file.write(f"ip as-path access-list CHINA_ASN permit _{asn}$\n")
-        
         config_file.write("!\n")
-        
-        # Generate route-map
         config_file.write("! Route-map for blocking China ASNs\n")
         config_file.write("route-map block_china deny 10\n")
         config_file.write(" description Block routes originated from Chinese ASNs\n")
@@ -75,33 +77,37 @@ def generate_frr_config(asn_list, config_filename="frr_filter.conf"):
         config_file.write("route-map block_china permit 20\n")
         config_file.write(" description Allow all other routes\n")
         config_file.write("!\n")
-# ============================================================================
+
+
+def generate_mikrotik_rsc(asn_list, config_filename="china_asns.rsc", list_name="CHINA_ASNS"):
+    """
+    Generates a MikroTik RouterOS v7 .rsc file that populates a
+    /routing/filter/num-list with the provided ASN list.
+    """
+    with open(config_filename, "w") as config_file:
+        config_file.write("/routing/filter/num-list\n")
+        for asn in asn_list:
+            config_file.write(f"add list={list_name} range={asn}\n")
+
 
 if __name__ == "__main__":
     asn_list = fetch_asns()
-    # ========================================================================
-    # MODIFIED: Added print statement
-    # ========================================================================
     print(f"Fetched {len(asn_list)} ASNs from bgp.he.net")
-    # ========================================================================
-    
+
+    if len(asn_list) < MIN_EXPECTED_ASNS:
+        sys.exit(
+            f"Error: only {len(asn_list)} ASNs fetched (expected >= {MIN_EXPECTED_ASNS}). "
+            "The page layout may have changed; aborting without writing files."
+        )
+
     save_asns_to_file(asn_list)
-    # ========================================================================
-    # MODIFIED: Added print statement
-    # ========================================================================
     print("Saved ASN list to china_asns.txt")
-    # ========================================================================
-    
+
     generate_bird_config(asn_list)
-    # ========================================================================
-    # MODIFIED: Added print statement
-    # ========================================================================
     print("Generated BIRD configuration: bird_filter.conf")
-    # ========================================================================
-    
-    # ========================================================================
-    # NEW: Generate FRR configuration
-    # ========================================================================
+
     generate_frr_config(asn_list)
     print("Generated FRR configuration: frr_filter.conf")
-    # ========================================================================
+
+    generate_mikrotik_rsc(asn_list)
+    print("Generated MikroTik num-list: china_asns.rsc")
