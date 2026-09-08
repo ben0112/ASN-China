@@ -823,6 +823,7 @@ add list=CHINA_ASNS range=198681
 add list=CHINA_ASNS range=198516
 add list=CHINA_ASNS range=198266
 add list=CHINA_ASNS range=198135
+add list=CHINA_ASNS range=198078
 add list=CHINA_ASNS range=198025
 add list=CHINA_ASNS range=197626
 add list=CHINA_ASNS range=154185
