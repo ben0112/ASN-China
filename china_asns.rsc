@@ -571,7 +571,6 @@ add list=CHINA_ASNS range=203309
 add list=CHINA_ASNS range=203236
 add list=CHINA_ASNS range=199310
 add list=CHINA_ASNS range=198588
-add list=CHINA_ASNS range=197817
 add list=CHINA_ASNS range=18257
 add list=CHINA_ASNS range=18244
 add list=CHINA_ASNS range=18242
