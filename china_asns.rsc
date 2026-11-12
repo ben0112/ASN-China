@@ -720,7 +720,6 @@ add list=CHINA_ASNS range=24144
 add list=CHINA_ASNS range=23910
 add list=CHINA_ASNS range=219489
 add list=CHINA_ASNS range=219480
-add list=CHINA_ASNS range=219397
 add list=CHINA_ASNS range=219378
 add list=CHINA_ASNS range=219332
 add list=CHINA_ASNS range=219283
