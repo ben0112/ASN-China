@@ -744,7 +744,6 @@ add list=CHINA_ASNS range=214955
 add list=CHINA_ASNS range=214933
 add list=CHINA_ASNS range=214921
 add list=CHINA_ASNS range=214871
-add list=CHINA_ASNS range=214848
 add list=CHINA_ASNS range=214759
 add list=CHINA_ASNS range=214660
 add list=CHINA_ASNS range=214613
